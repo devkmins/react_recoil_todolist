@@ -1,8 +1,16 @@
-import { useSetRecoilState } from "recoil";
-import { Categories, IToDo, toDoState } from "../atoms";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  Categories,
+  IToDo,
+  ICategoryForm,
+  customCategoryState,
+  toDoState,
+} from "../atoms";
 
 function ToDo({ text, id, category }: IToDo) {
   const setToDos = useSetRecoilState(toDoState);
+  const customCategories = useRecoilValue(customCategoryState);
+
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const {
       currentTarget: { name },
@@ -16,7 +24,19 @@ function ToDo({ text, id, category }: IToDo) {
         newToDo,
         ...oldToDos.slice(targetIndex + 1),
       ];
+
+      localStorage.setItem("toDos", JSON.stringify(newToDos));
+
       return newToDos;
+    });
+  };
+
+  const removeToDo = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setToDos((prevTodos) => {
+      const updateToDos = prevTodos.filter((item) => item.id !== id);
+      localStorage.setItem("toDos", JSON.stringify(updateToDos));
+
+      return updateToDos;
     });
   };
 
@@ -37,6 +57,20 @@ function ToDo({ text, id, category }: IToDo) {
         <button name={Categories.DONE} onClick={onClick}>
           Done
         </button>
+      )}
+      {customCategories
+        ? customCategories.map((customCategory: ICategoryForm) => {
+            if (customCategory.category !== category) {
+              return (
+                <button name={customCategory.category} onClick={onClick}>
+                  {customCategory.category}
+                </button>
+              );
+            }
+          })
+        : ""}
+      {category === Categories.DONE && (
+        <button onClick={removeToDo}>Remove</button>
       )}
     </li>
   );
