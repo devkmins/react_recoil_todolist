@@ -1,6 +1,27 @@
 import { useSetRecoilState } from "recoil";
 import { ICategoryForm, customCategoryState } from "../atoms";
 import { useForm } from "react-hook-form";
+import styled from "styled-components";
+
+const Form = styled.form`
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  width: 95%;
+  margin: 5px;
+`;
+
+const Input = styled.input`
+  height: 50px;
+  background-color: white;
+  border: none;
+`;
+
+const Button = styled.button`
+  height: 50px;
+  background-color: white;
+  border: none;
+  border-left: 2px solid #5c6fbe;
+`;
 
 function CreateCategory() {
   const setCategories = useSetRecoilState(customCategoryState);
@@ -21,14 +42,15 @@ function CreateCategory() {
   };
 
   return (
-    <form onSubmit={handleSubmit(handleValid)}>
-      <input
+    <Form onSubmit={handleSubmit(handleValid)}>
+      <Input
         {...register("category", {
           required: "Please write a new category",
         })}
-        placeholder="Add a new category"></input>
-      <button>Add</button>
-    </form>
+        placeholder="Add a new category"
+      />
+      <Button>+</Button>
+    </Form>
   );
 }
 

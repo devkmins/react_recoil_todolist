@@ -29,7 +29,7 @@ export const toDoState = atom<IToDo[]>({
 
 export const categoryState = atom<Categories>({
   key: "category",
-  default: Categories.DOING,
+  default: Categories.TO_DO,
 });
 
 export const customCategoryState = atom<ICategoryForm[]>({
